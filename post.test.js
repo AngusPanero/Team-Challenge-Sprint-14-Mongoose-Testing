@@ -48,3 +48,30 @@ describe("Testing Create", () => {
         expect(res.body.Message).toBe("500 - Error en la Solicitud")    
     })
 });
+
+describe("Testing Get /title/:title", () => {
+    
+    beforeAll(async () => {
+        await mongoose.connect(process.env.MONGO_URI)
+    })
+
+    it("Deberiamos Obtener un post por el title, despues de crearlo", async () =>{
+        
+        const PostModel = await Model.create({
+            title: "Primer Post",
+            body: "Bienvenido a Mi Perfíl",
+            });
+
+        const res = await request(app).get(`/title/${encodeURIComponent(PostModel.title)}`)
+
+        expect(res.status).toBe(200);
+        expect(res.body.title).toBe(PostModel.title);
+        expect(res.body.body).toBe(PostModel.body);
+    })
+
+    it("Debería dar error si no encuentra Post", async () => {
+        const res = await request(app).get("/title/titulorandom")
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({"Message": "Post no encontrado"})
+    })
+});

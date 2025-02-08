@@ -16,6 +16,7 @@ app.use((req, res) => {
 })
 
 app.listen(PORT, (req, res) => {
-    console.log(`Server Listening on Port: http://localhost:${PORT}`);
-    
+    console.log(`Server Listening on Port: http://localhost:${PORT}`);  
 })
+
+module.exports = app;
